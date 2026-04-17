@@ -3,7 +3,10 @@
     "allow": [
       "Bash(xcodebuild test-without-building:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(xcodebuild clean build:*)",
+      "mcp__serena__list_dir",
+      "Bash(xcodebuild:*)"
     ]
   }
 }

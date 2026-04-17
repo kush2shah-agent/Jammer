@@ -6,13 +6,13 @@
 //
 
 import Foundation
-import Testing
+import XCTest
 @testable import Jammer
 
-struct ModelsTests {
+final class ModelsTests: XCTestCase {
     // MARK: - Credit Tests
 
-    @Test func creditCodableRoundtrip() throws {
+    func testCreditCodableRoundtrip() throws {
         let credit = Credit(
             name: "Quincy Jones",
             role: "producer",
@@ -25,12 +25,12 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let decoded = try decoder.decode(Credit.self, from: data)
 
-        #expect(decoded.name == "Quincy Jones")
-        #expect(decoded.role == "producer")
-        #expect(decoded.instrument == nil)
+        XCTAssertEqual(decoded.name, "Quincy Jones")
+        XCTAssertEqual(decoded.role, "producer")
+        XCTAssertNil(decoded.instrument)
     }
 
-    @Test func creditWithInstrument() throws {
+    func testCreditWithInstrument() throws {
         let credit = Credit(
             name: "John Bonham",
             role: "musician",
@@ -43,12 +43,12 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let decoded = try decoder.decode(Credit.self, from: data)
 
-        #expect(decoded.name == "John Bonham")
-        #expect(decoded.role == "musician")
-        #expect(decoded.instrument == "drums")
+        XCTAssertEqual(decoded.name, "John Bonham")
+        XCTAssertEqual(decoded.role, "musician")
+        XCTAssertEqual(decoded.instrument, "drums")
     }
 
-    @Test func creditFromJSON() throws {
+    func testCreditFromJSON() throws {
         let json = """
         {
             "name": "George Martin",
@@ -60,14 +60,14 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let credit = try decoder.decode(Credit.self, from: json)
 
-        #expect(credit.name == "George Martin")
-        #expect(credit.role == "producer")
-        #expect(credit.instrument == "piano")
+        XCTAssertEqual(credit.name, "George Martin")
+        XCTAssertEqual(credit.role, "producer")
+        XCTAssertEqual(credit.instrument, "piano")
     }
 
     // MARK: - RecordingInfo Tests
 
-    @Test func recordingInfoCodableRoundtrip() throws {
+    func testRecordingInfoCodableRoundtrip() throws {
         let info = RecordingInfo(
             studioName: "Abbey Road Studios",
             location: "London, UK",
@@ -80,12 +80,12 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let decoded = try decoder.decode(RecordingInfo.self, from: data)
 
-        #expect(decoded.studioName == "Abbey Road Studios")
-        #expect(decoded.location == "London, UK")
-        #expect(decoded.date == "June 1967")
+        XCTAssertEqual(decoded.studioName, "Abbey Road Studios")
+        XCTAssertEqual(decoded.location, "London, UK")
+        XCTAssertEqual(decoded.date, "June 1967")
     }
 
-    @Test func recordingInfoWithNilValues() throws {
+    func testRecordingInfoWithNilValues() throws {
         let info = RecordingInfo(
             studioName: nil,
             location: "Los Angeles, CA",
@@ -98,12 +98,12 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let decoded = try decoder.decode(RecordingInfo.self, from: data)
 
-        #expect(decoded.studioName == nil)
-        #expect(decoded.location == "Los Angeles, CA")
-        #expect(decoded.date == nil)
+        XCTAssertNil(decoded.studioName)
+        XCTAssertEqual(decoded.location, "Los Angeles, CA")
+        XCTAssertNil(decoded.date)
     }
 
-    @Test func recordingInfoFromJSON() throws {
+    func testRecordingInfoFromJSON() throws {
         let json = """
         {
             "studioName": "Electric Lady Studios",
@@ -115,14 +115,14 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let info = try decoder.decode(RecordingInfo.self, from: json)
 
-        #expect(info.studioName == "Electric Lady Studios")
-        #expect(info.location == "New York, NY")
-        #expect(info.date == "March 1975")
+        XCTAssertEqual(info.studioName, "Electric Lady Studios")
+        XCTAssertEqual(info.location, "New York, NY")
+        XCTAssertEqual(info.date, "March 1975")
     }
 
     // MARK: - Relationship Tests
 
-    @Test func relationshipCodableRoundtrip() throws {
+    func testRelationshipCodableRoundtrip() throws {
         let relationship = Relationship(
             type: "samples",
             targetTrack: "When the Levee Breaks",
@@ -136,13 +136,13 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let decoded = try decoder.decode(Relationship.self, from: data)
 
-        #expect(decoded.type == "samples")
-        #expect(decoded.targetTrack == "When the Levee Breaks")
-        #expect(decoded.targetArtist == "Led Zeppelin")
-        #expect(decoded.description == "Drum break sampled")
+        XCTAssertEqual(decoded.type, "samples")
+        XCTAssertEqual(decoded.targetTrack, "When the Levee Breaks")
+        XCTAssertEqual(decoded.targetArtist, "Led Zeppelin")
+        XCTAssertEqual(decoded.description, "Drum break sampled")
     }
 
-    @Test func relationshipWithoutDescription() throws {
+    func testRelationshipWithoutDescription() throws {
         let relationship = Relationship(
             type: "cover",
             targetTrack: "Respect",
@@ -156,13 +156,13 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let decoded = try decoder.decode(Relationship.self, from: data)
 
-        #expect(decoded.type == "cover")
-        #expect(decoded.targetTrack == "Respect")
-        #expect(decoded.targetArtist == "Otis Redding")
-        #expect(decoded.description == nil)
+        XCTAssertEqual(decoded.type, "cover")
+        XCTAssertEqual(decoded.targetTrack, "Respect")
+        XCTAssertEqual(decoded.targetArtist, "Otis Redding")
+        XCTAssertNil(decoded.description)
     }
 
-    @Test func relationshipFromJSON() throws {
+    func testRelationshipFromJSON() throws {
         let json = """
         {
             "type": "remix",
@@ -175,15 +175,15 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let relationship = try decoder.decode(Relationship.self, from: json)
 
-        #expect(relationship.type == "remix")
-        #expect(relationship.targetTrack == "Blue Monday")
-        #expect(relationship.targetArtist == "New Order")
-        #expect(relationship.description == "Extended mix")
+        XCTAssertEqual(relationship.type, "remix")
+        XCTAssertEqual(relationship.targetTrack, "Blue Monday")
+        XCTAssertEqual(relationship.targetArtist, "New Order")
+        XCTAssertEqual(relationship.description, "Extended mix")
     }
 
     // MARK: - Fact Tests
 
-    @Test func factCodableRoundtrip() throws {
+    func testFactCodableRoundtrip() throws {
         let fact = Fact(
             title: "Sampled By",
             detail: "This drum break was sampled in over 1000 hip-hop tracks",
@@ -198,14 +198,14 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let decoded = try decoder.decode(Fact.self, from: data)
 
-        #expect(decoded.title == "Sampled By")
-        #expect(decoded.detail == "This drum break was sampled in over 1000 hip-hop tracks")
-        #expect(decoded.priority == 5)
-        #expect(decoded.category == "relationship")
-        #expect(decoded.source == "MusicBrainz")
+        XCTAssertEqual(decoded.title, "Sampled By")
+        XCTAssertEqual(decoded.detail, "This drum break was sampled in over 1000 hip-hop tracks")
+        XCTAssertEqual(decoded.priority, 5)
+        XCTAssertEqual(decoded.category, "relationship")
+        XCTAssertEqual(decoded.source, "MusicBrainz")
     }
 
-    @Test func factPriorityRange() throws {
+    func testFactPriorityRange() throws {
         let lowPriority = Fact(
             title: "Minor Detail",
             detail: "Some additional context",
@@ -222,11 +222,11 @@ struct ModelsTests {
             source: "Apple Music"
         )
 
-        #expect(lowPriority.priority == 1)
-        #expect(highPriority.priority == 5)
+        XCTAssertEqual(lowPriority.priority, 1)
+        XCTAssertEqual(highPriority.priority, 5)
     }
 
-    @Test func factFromJSON() throws {
+    func testFactFromJSON() throws {
         let json = """
         {
             "title": "Recording Location",
@@ -240,16 +240,16 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let fact = try decoder.decode(Fact.self, from: json)
 
-        #expect(fact.title == "Recording Location")
-        #expect(fact.detail == "Recorded at Abbey Road Studios, London in June 1967")
-        #expect(fact.priority == 4)
-        #expect(fact.category == "recording")
-        #expect(fact.source == "MusicBrainz")
+        XCTAssertEqual(fact.title, "Recording Location")
+        XCTAssertEqual(fact.detail, "Recorded at Abbey Road Studios, London in June 1967")
+        XCTAssertEqual(fact.priority, 4)
+        XCTAssertEqual(fact.category, "recording")
+        XCTAssertEqual(fact.source, "MusicBrainz")
     }
 
     // MARK: - EnrichedTrack Tests
 
-    @Test func enrichedTrackCodableRoundtrip() throws {
+    func testEnrichedTrackCodableRoundtrip() throws {
         let track = EnrichedTrack(
             title: "Billie Jean",
             artistName: "Michael Jackson",
@@ -270,16 +270,16 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let decoded = try decoder.decode(EnrichedTrack.self, from: data)
 
-        #expect(decoded.title == "Billie Jean")
-        #expect(decoded.artistName == "Michael Jackson")
-        #expect(decoded.albumName == "Thriller")
-        #expect(decoded.artworkURL == "https://example.com/artwork.jpg")
-        #expect(decoded.duration == 294.0)
-        #expect(decoded.isrc == "USSM18200123")
-        #expect(decoded.musicKitTrackID == "12345")
+        XCTAssertEqual(decoded.title, "Billie Jean")
+        XCTAssertEqual(decoded.artistName, "Michael Jackson")
+        XCTAssertEqual(decoded.albumName, "Thriller")
+        XCTAssertEqual(decoded.artworkURL, "https://example.com/artwork.jpg")
+        XCTAssertEqual(decoded.duration, 294.0)
+        XCTAssertEqual(decoded.isrc, "USSM18200123")
+        XCTAssertEqual(decoded.musicKitTrackID, "12345")
     }
 
-    @Test func enrichedTrackWithFullData() throws {
+    func testEnrichedTrackWithFullData() throws {
         let credits = [
             Credit(name: "Quincy Jones", role: "producer", instrument: nil),
             Credit(name: "Bruce Swedien", role: "engineer", instrument: nil),
@@ -338,17 +338,17 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let decoded = try decoder.decode(EnrichedTrack.self, from: data)
 
-        #expect(decoded.title == "Billie Jean")
-        #expect(decoded.credits.count == 3)
-        #expect(decoded.credits[0].name == "Quincy Jones")
-        #expect(decoded.recordingInfo?.studioName == "Westlake Recording Studios")
-        #expect(decoded.relationships.count == 1)
-        #expect(decoded.relationships[0].type == "sampled-by")
-        #expect(decoded.facts.count == 2)
-        #expect(decoded.facts[0].priority == 5)
+        XCTAssertEqual(decoded.title, "Billie Jean")
+        XCTAssertEqual(decoded.credits.count, 3)
+        XCTAssertEqual(decoded.credits[0].name, "Quincy Jones")
+        XCTAssertEqual(decoded.recordingInfo?.studioName, "Westlake Recording Studios")
+        XCTAssertEqual(decoded.relationships.count, 1)
+        XCTAssertEqual(decoded.relationships[0].type, "sampled-by")
+        XCTAssertEqual(decoded.facts.count, 2)
+        XCTAssertEqual(decoded.facts[0].priority, 5)
     }
 
-    @Test func enrichedTrackFromJSON() throws {
+    func testEnrichedTrackFromJSON() throws {
         let json = """
         {
             "title": "Smells Like Teen Spirit",
@@ -397,16 +397,16 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let track = try decoder.decode(EnrichedTrack.self, from: json)
 
-        #expect(track.title == "Smells Like Teen Spirit")
-        #expect(track.artistName == "Nirvana")
-        #expect(track.albumName == "Nevermind")
-        #expect(track.credits.count == 2)
-        #expect(track.recordingInfo?.studioName == "Sound City Studios")
-        #expect(track.relationships.count == 1)
-        #expect(track.facts.count == 1)
+        XCTAssertEqual(track.title, "Smells Like Teen Spirit")
+        XCTAssertEqual(track.artistName, "Nirvana")
+        XCTAssertEqual(track.albumName, "Nevermind")
+        XCTAssertEqual(track.credits.count, 2)
+        XCTAssertEqual(track.recordingInfo?.studioName, "Sound City Studios")
+        XCTAssertEqual(track.relationships.count, 1)
+        XCTAssertEqual(track.facts.count, 1)
     }
 
-    @Test func enrichedTrackWithNilOptionals() throws {
+    func testEnrichedTrackWithNilOptionals() throws {
         let track = EnrichedTrack(
             title: "Test Track",
             artistName: "Test Artist",
@@ -423,46 +423,46 @@ struct ModelsTests {
         let decoder = JSONDecoder()
         let decoded = try decoder.decode(EnrichedTrack.self, from: data)
 
-        #expect(decoded.artworkURL == nil)
-        #expect(decoded.duration == nil)
-        #expect(decoded.isrc == nil)
-        #expect(decoded.credits.isEmpty)
-        #expect(decoded.recordingInfo == nil)
-        #expect(decoded.relationships.isEmpty)
-        #expect(decoded.facts.isEmpty)
+        XCTAssertNil(decoded.artworkURL)
+        XCTAssertNil(decoded.duration)
+        XCTAssertNil(decoded.isrc)
+        XCTAssertTrue(decoded.credits.isEmpty)
+        XCTAssertNil(decoded.recordingInfo)
+        XCTAssertTrue(decoded.relationships.isEmpty)
+        XCTAssertTrue(decoded.facts.isEmpty)
     }
 
     // MARK: - Sendable Conformance Tests
 
-    @Test func creditIsSendable() {
+    func testCreditIsSendable() {
         let credit = Credit(name: "Test", role: "test")
         Task {
             let _ = credit // Should compile without warnings if Sendable
         }
     }
 
-    @Test func recordingInfoIsSendable() {
+    func testRecordingInfoIsSendable() {
         let info = RecordingInfo(studioName: "Test Studio")
         Task {
             let _ = info // Should compile without warnings if Sendable
         }
     }
 
-    @Test func relationshipIsSendable() {
+    func testRelationshipIsSendable() {
         let rel = Relationship(type: "test", targetTrack: "Test", targetArtist: "Test")
         Task {
             let _ = rel // Should compile without warnings if Sendable
         }
     }
 
-    @Test func factIsSendable() {
+    func testFactIsSendable() {
         let fact = Fact(title: "Test", detail: "Test", priority: 3, category: "test", source: "test")
         Task {
             let _ = fact // Should compile without warnings if Sendable
         }
     }
 
-    @Test func enrichedTrackIsSendable() {
+    func testEnrichedTrackIsSendable() {
         let track = EnrichedTrack(
             title: "Test",
             artistName: "Test",
