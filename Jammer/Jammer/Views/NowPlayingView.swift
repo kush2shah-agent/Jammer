@@ -88,7 +88,7 @@ struct NowPlayingView: View {
     }
 
     private func artworkView(for song: Song, in geometry: GeometryProxy) -> some View {
-        let artworkSize = artworkSize(for: geometry)
+        let artworkSize = Self.artworkSize(in: geometry.size)
 
         return Group {
             if let artwork = song.artwork {
@@ -156,10 +156,10 @@ struct NowPlayingView: View {
 
     // MARK: - Helpers
 
-    /// Calculate artwork size based on device
-    private func artworkSize(for geometry: GeometryProxy) -> CGFloat {
-        let width = geometry.size.width
-        let height = geometry.size.height
+    /// Size artwork within the current container, including narrow and short windows.
+    static func artworkSize(in container: CGSize) -> CGFloat {
+        let width = container.width
+        let height = container.height
 
         // Leave room for track info and controls
         let maxHeight = height * 0.5
@@ -169,7 +169,7 @@ struct NowPlayingView: View {
 
         // Return the smaller of the two constraints, capped at reasonable sizes
         let size = min(maxWidth, maxHeight, 400)
-        return max(size, 200) // Minimum of 200pt
+        return max(size, 0)
     }
 }
 
